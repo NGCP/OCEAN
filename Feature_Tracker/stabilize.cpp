@@ -95,7 +95,7 @@ int main(int argc, char **argv)
   ofstream out_smoothed_trajectory("smoothed_trajectory.txt");
   ofstream out_new_transform("new_prev_to_cur_transformation.txt");
 
-  VideoCapture cap("Video_003.avi");
+  VideoCapture cap(0);
   assert(cap.isOpened());
 
   Mat cur, cur_grey;
@@ -245,7 +245,7 @@ int main(int argc, char **argv)
     resize(cur2, cur2, cur.size());
 
     pMOG2 = createBackgroundSubtractorMOG2();
-    pMOG2->apply(cur2, fgMaskMOG2, 0.05);
+    pMOG2->apply(cur, fgMaskMOG2, 0.3);
     //show the current frame and the fg masks
     imshow("cur", cur);
     imshow("cur2", cur2);
