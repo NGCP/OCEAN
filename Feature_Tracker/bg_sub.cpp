@@ -84,11 +84,16 @@ void processVideo(char* videoFilename) {
         frame_count++;
 
         //update the background model
-        pMOG2->apply(frame, fgMaskMOG2, 0.1);
+        pMOG2->apply(frame, fgMaskMOG2, 0.05);
        
         //show the current frame and the fg masks
         //imshow("Frame", frame);
         //imshow("FG Mask MOG 2", fgMaskMOG2);
+
+        Mat morph = Mat::zeros(fgMaskMOG2.rows, fgMaskMOG2.cols, CV_8UC1);
+        Mat element = getStructuringElement(MORPH_ELLIPSE, Size(3, 3));
+        morphologyEx(fgMaskMOG2, morph, MORPH_CLOSE, element, Point(-1,-1), 5);
+        //imshow("closin", morph);
         
         //invert fg mask
         inverted = Mat::zeros(fgMaskMOG2.rows, fgMaskMOG2.cols, CV_8UC1);
@@ -99,10 +104,10 @@ void processVideo(char* videoFilename) {
         gaussian = Mat::zeros(inverted.rows, inverted.cols, CV_8UC1);
         GaussianBlur(inverted, gaussian, Size(7, 7), 0, 0);
         //blur it some more b/c changing sigma vals made some parts more visible?
-        GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
-        GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
-        GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
-        GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
+        // GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
+        // GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
+        // GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
+        // GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
 
         //threshold mask
         for(col = 0; col < gaussian.cols; col++)
