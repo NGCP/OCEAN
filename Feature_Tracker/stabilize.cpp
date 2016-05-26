@@ -95,7 +95,7 @@ int main(int argc, char **argv)
   ofstream out_smoothed_trajectory("smoothed_trajectory.txt");
   ofstream out_new_transform("new_prev_to_cur_transformation.txt");
 
-  VideoCapture cap(0);
+  VideoCapture cap("Video_003.avi");
   assert(cap.isOpened());
 
   Mat cur, cur_grey;
@@ -244,10 +244,12 @@ int main(int argc, char **argv)
     // Resize cur2 back to cur size, for better side by side comparison
     resize(cur2, cur2, cur.size());
 
-    pMOG2->apply(cur2, fgMaskMOG2, 0.3);
+    pMOG2 = createBackgroundSubtractorMOG2();
+    pMOG2->apply(cur2, fgMaskMOG2, 0.05);
     //show the current frame and the fg masks
-    //imshow("Frame", frame);
-    //imshow("FG Mask MOG 2", fgMaskMOG2);
+    imshow("cur", cur);
+    imshow("cur2", cur2);
+    imshow("FG Mask MOG 2", fgMaskMOG2);
     
     //invert fg mask
     inverted = Mat::zeros(fgMaskMOG2.rows, fgMaskMOG2.cols, CV_8UC1);
@@ -262,13 +264,6 @@ int main(int argc, char **argv)
     GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
     GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
     GaussianBlur(gaussian, gaussian, Size(7, 7), 0, 0);
-
-    //image opening
-    /*Mat kernel;
-    Mat opening;
-    kernel = getStructuringElement(CV_SHAPE_CUSTOM, Size(5, 5), Point(-1,-1));
-    morphologyEx(gaussian, opening, MORPH_OPEN, kernel);
-    imshow("image opening", opening);*/
 
     //threshold mask
     for(int col = 0; col < gaussian.cols; col++)
