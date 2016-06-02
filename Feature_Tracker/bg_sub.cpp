@@ -18,7 +18,7 @@
 #include <sstream>
 
 #define MIN_FEATURES 30
-#define FAST_THRESHOLD 100
+#define FAST_THRESHOLD 140
 #define FEATURE_POINT_SIZE 3
 #define MAX_FRAMES 50
 
@@ -84,7 +84,7 @@ void processVideo(char* videoFilename) {
         frame_count++;
 
         //update the background model
-        pMOG2->apply(frame, fgMaskMOG2, 0.05);
+        pMOG2->apply(frame, fgMaskMOG2, 0.7);
        
         //show the current frame and the fg masks
         //imshow("Frame", frame);
@@ -128,7 +128,7 @@ void processVideo(char* videoFilename) {
 
         //mask original w/ gaussian
         frame.copyTo(gMasked, gaussian);
-        imshow("gaussian masked", gMasked);
+        //imshow("gaussian masked", gMasked);
 
         /* Convert Frame to Grayscale */
         cvtColor(gMasked, sub_gray, COLOR_BGR2GRAY);
@@ -208,9 +208,13 @@ void processVideo(char* videoFilename) {
 
       /* Release Grayscale Frame */
       sub_gray.release();
+
+      namedWindow("Live View", WINDOW_NORMAL);
+      namedWindow("Moving Object Removal", WINDOW_NORMAL);
     
       /* Display Frame in Window */
-      imshow("Live View", gMasked);
+      imshow("Live View", frame);
+      imshow("Moving Object Removal", gMasked);
 
         //get the input from the keyboard
         keyboard = waitKey( 30 );
