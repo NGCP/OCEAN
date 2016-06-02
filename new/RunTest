@@ -1,3 +1,0 @@
-export DYLD_LIBRARY_PATH=/Users/Tyler/Documents/Programs/ComputerVision/opencv-3.1.0/build/lib
-g++ -ggdb `pkg-config --cflags --libs opencv3` ecc.cpp -o ecc
-./ecc
